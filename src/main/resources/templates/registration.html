@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8"></meta>
+<meta name="viewport" content="width=device-width, initial-scale=1"></meta>
+<title>User Registration</title>
+<link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css" />
+<link rel="stylesheet" href="css/custom-global.css" />
+validation-message
+<script src="javascript/jquery-1.11.1.min.js"></script>
+<script src="javascript/jquery.mobile-1.4.5.min.js"></script>
+<script type="text/javascript">
+	
+</script>
+</head>
+<body>
+<div data-role="page">
+	<div data-role="header">
+		<h1>Register User</h1>
+	</div><!-- /header -->
+
+	<div role="main" class="ui-content">
+
+		<form autocomplete="off" action="#" th:action="@{registrationSubmit}"
+					th:object="${user}" method="post" class="form-horizontal"
+					role="form">
+			<label for="userName">User Name: </label>
+			<label th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}" class="validation-message"></label>
+			<input type="text" th:field="*{userName}" placeholder="User Name" value="">
+			<label for="password">Password: </label>
+			<label th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="validation-message"></label>
+			<input type="password" th:field="*{password}" placeholder="Password" value="">
+			<label for="reenter-password">Re-Enter Password: </label>
+			<input type="password" name="reenter-password" id="reenter-password" placeholder="Re-Enter Password" value="">
+			<label for="firstName">First Name: </label>
+			<label th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" class="validation-message"></label>
+			<input type="text" th:field="*{firstName}" placeholder="First Name" value="">
+			<label for="lastName">Last Name: </label>
+			<label th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" class="validation-message"></label>
+			<input type="text" th:field="*{lastName}" placeholder="Last Name" value="">
+			<label for="mobileNumber">Mobile #: </label>
+			<label th:if="${#fields.hasErrors('mobileNumber')}" th:errors="*{mobileNumber}" class="validation-message"></label>
+			<input type="text" th:field="*{mobileNumber}" placeholder="Mobile No (10 Digit)" value="">
+			<label for="email">Email #: </label>
+			<label th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="validation-message"></label>
+			<input type="text" th:field="*{email}" placeholder="email id" value="">
+			<button type="submit" class="ui-btn">Save</button>
+			<a href="login" class="ui-btn">Back</a>
+		</form>
+
+	</div><!-- /content -->
+
+	<div data-role="footer">
+		<h4>Jay Swaminarayan</h4>
+	</div><!-- /footer -->
+</div>
+</body>
+</html>

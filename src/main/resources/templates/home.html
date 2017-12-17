@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8"></meta>
+<meta name="viewport" content="width=device-width, initial-scale=1"></meta>
+<title>Login Page</title>
+<link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css" />
+<script src="javascript/jquery-1.11.1.min.js"></script>
+<script src="javascript/jquery.mobile-1.4.5.min.js"></script>
+</head>
+<body>
+<div data-role="page">
+	<div data-role="header">
+		<h1>Home Page</h1>
+	</div><!-- /header -->
+
+	<div role="main" class="ui-content">
+		<!-- <label th:text="${role[0].role}"></label>
+		<label th:text="${T(com.krb.shakotsav.bean.definedentity.DefinedRole).SUPER_ADMIN.roleName}"></label> -->
+		<div th:if="${role[0].role == T(com.krb.shakotsav.bean.definedentity.DefinedRole).SUPER_ADMIN.roleName}">
+			<a href="#" class="ui-btn">Manage Users</a>
+			<a href="#" class="ui-btn">Manage Tables</a>
+			<a href="#" class="ui-btn">Manage Items</a>
+		</div>
+	</div><!-- /content -->
+
+	<div data-role="footer">
+		<h4>Jay Swaminarayan</h4>
+	</div><!-- /footer -->
+</div>
+</body>
+</html>
