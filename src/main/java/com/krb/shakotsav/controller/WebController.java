@@ -1,7 +1,9 @@
 package com.krb.shakotsav.controller;
 
+import java.net.BindException;
 import java.security.Principal;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.validation.Valid;
@@ -9,21 +11,29 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.krb.shakotsav.bean.Role;
+import com.krb.shakotsav.bean.Table;
 import com.krb.shakotsav.bean.User;
 import com.krb.shakotsav.bean.definedentity.DefinedRole;
 import com.krb.shakotsav.service.RoleService;
+import com.krb.shakotsav.service.TableService;
 
 @Controller
 public class WebController extends BaseController{
 	
 	@Autowired
 	private RoleService roleService;
+
+	@Autowired
+	private TableService tableService;
 	
 	@RequestMapping(value={"/", "/login"}, method = RequestMethod.GET)
 	public ModelAndView login(){
@@ -75,6 +85,40 @@ public class WebController extends BaseController{
 		System.out.println(userObj.getEmail());
 		
 		modelAndView.setViewName("home");
+		return modelAndView;
+	}
+	
+	@RequestMapping(value="/tableManagement", method = RequestMethod.GET)
+	public ModelAndView tableManagement(Principal principal){
+		ModelAndView modelAndView = new ModelAndView();
+		User userObj = setupBaseParameter(modelAndView, principal);
+		
+		List<Table> listTables = tableService.getByAll();
+		modelAndView.addObject("tableObjs", listTables);
+		
+		modelAndView.setViewName("table-management");
+		return modelAndView;
+	}
+	
+	@RequestMapping(value="/tableManagementSubmit", method = RequestMethod.POST)
+	public ModelAndView tableManagementSubmit(Principal principal, @ModelAttribute(name="tableName") String tableName, BindingResult bindingResult){
+		ModelAndView modelAndView = new ModelAndView();
+		User userObj = setupBaseParameter(modelAndView, principal);
+		
+		Table tableObj =  tableService.findByTableName(tableName);
+		if(tableObj != null){
+			Errors errors = (Errors) new BindException("Table Name is already used");
+			bindingResult.addAllErrors(errors);
+			modelAndView.setViewName("table-management");
+		}else{
+			tableObj = new Table();
+			tableObj.setTableName(tableName);
+			tableService.save(tableObj);
+			
+			RedirectView redirectView = new RedirectView("tableManagement", true);
+			modelAndView.setView(redirectView);
+		}
+		
 		return modelAndView;
 	}
 	

@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"></meta>
 <meta name="viewport" content="width=device-width, initial-scale=1"></meta>
-<title>Login Page</title>
+<title>Table Management</title>
 <link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css" />
 <script src="javascript/jquery-1.11.1.min.js"></script>
 <script src="javascript/jquery.mobile-1.4.5.min.js"></script>
@@ -12,16 +12,24 @@
 <body>
 <div data-role="page">
 	<div data-role="header">
-		<h1>Home Page</h1>
+		<h1>Tables Manage</h1>
 	</div><!-- /header -->
 
 	<div role="main" class="ui-content">
-		<!-- <label th:text="${role[0].role}"></label>
-		<label th:text="${T(com.krb.shakotsav.bean.definedentity.DefinedRole).SUPER_ADMIN.roleName}"></label> -->
-		<div th:if="${role[0].role == T(com.krb.shakotsav.bean.definedentity.DefinedRole).SUPER_ADMIN.roleName}">
-			<a href="#" class="ui-btn">Manage Users</a>
-			<a href="tableManagement" class="ui-btn">Manage Tables</a>
-			<a href="#" class="ui-btn">Manage Items</a>
+		<div>
+			<form autocomplete="off" th:action="@{tableManagementSubmit}"
+					method="post" class="form-horizontal"
+					role="form">
+				<label for="tableName">Table Name: </label>
+				<input type="text" name="tableName" id="tableName" placeholder="Table Name" value="">
+				<label class="validation-error">Error</label>
+				<button class="ui-btn ui-corner-all ui-icon-check ui-btn-icon-left">Save</button>
+			</form>
+		</div>
+		<div>
+			<ul data-role="listview" data-inset="true" th:each="tO,start : ${tableObjs}">
+			    <li><a href="#" th:text="*{tO.tableName}">Test Table</a></li>
+			</ul>
 		</div>
 	</div><!-- /content -->
 
