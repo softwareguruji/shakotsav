@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"></meta>
 <meta name="viewport" content="width=device-width, initial-scale=1"></meta>
-<title>Table Management</title>
+<title>Item Management</title>
 <link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css" />
 <script src="javascript/jquery-1.11.1.min.js"></script>
 <script src="javascript/jquery.mobile-1.4.5.min.js"></script>
@@ -12,26 +12,26 @@
 <body>
 <div data-role="page">
 	<div data-role="header">
-		<h1>Tables Manage</h1>
+		<h1>Item Manage</h1>
 	</div><!-- /header -->
 
 	<div role="main" class="ui-content">
 		<div>
-			<form autocomplete="off" th:action="@{tableManagementSubmit}"
+			<form autocomplete="off" th:action="@{itemManagementSubmit}"
 					method="post" class="form-horizontal"
 					role="form">
-				<label for="tableName">Table Name: </label>
-				<input type="text" name="tableName" id="tableName" placeholder="Table Name" value="">
+				<label for="itemName">Item Name: </label>
+				<input type="text" name="itemName" id="itemName" placeholder="Item Name" value="">
 				<label class="validation-error" >Error</label>
 				<div align="center" th:if="${param.error}">
-					<p style="font-size: 20; color: #FF1C19;">Table Name is already used. Please check the table name.</p>
+					<p style="font-size: 20; color: #FF1C19;">Item Name is already used. Please check the item name.</p>
 				</div>
 				<button class="ui-btn ui-corner-all ui-icon-check ui-btn-icon-left">Save</button>
 			</form>
 		</div>
 		<div>
-			<ul data-role="listview" data-inset="true" th:each="tO,start : ${tableObjs}">
-			    <li><a th:href="${'tableItemManagement?tableId='+tO.tableId}" href="" th:text="*{tO.tableName}">Test Table</a></li>
+			<ul data-role="listview" data-inset="true" th:each="iO,start : ${itemObjs}">
+			    <li><a href="#" th:text="*{iO.itemName}">Test Item</a></li>
 			</ul>
 		</div>
 	</div><!-- /content -->

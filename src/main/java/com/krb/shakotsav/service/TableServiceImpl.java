@@ -35,5 +35,10 @@ public class TableServiceImpl implements TableService{
 	public List<Table> getByAll() {
 		return tableRepository.findAll();
 	}
+
+	@Override
+	public Table findById(Long id) {
+		return tableRepository.getOne(id);
+	}
 	
 }

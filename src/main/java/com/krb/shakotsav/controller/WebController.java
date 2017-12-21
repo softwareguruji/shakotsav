@@ -16,13 +16,14 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.view.RedirectView;
 
+import com.krb.shakotsav.bean.Item;
 import com.krb.shakotsav.bean.Role;
 import com.krb.shakotsav.bean.Table;
 import com.krb.shakotsav.bean.User;
 import com.krb.shakotsav.bean.definedentity.DefinedRole;
+import com.krb.shakotsav.service.ItemService;
 import com.krb.shakotsav.service.RoleService;
 import com.krb.shakotsav.service.TableService;
 
@@ -34,7 +35,10 @@ public class WebController extends BaseController{
 
 	@Autowired
 	private TableService tableService;
-	
+
+	@Autowired
+	private ItemService itemService;
+
 	@RequestMapping(value={"/", "/login"}, method = RequestMethod.GET)
 	public ModelAndView login(){
 		ModelAndView modelAndView = new ModelAndView();
@@ -122,5 +126,69 @@ public class WebController extends BaseController{
 		return modelAndView;
 	}
 	
+
+	@RequestMapping(value="/itemManagement", method = RequestMethod.GET)
+	public ModelAndView itemManagement(Principal principal){
+		ModelAndView modelAndView = new ModelAndView();
+		User userObj = setupBaseParameter(modelAndView, principal);
+		
+		List<Item> listItems = itemService.getByAll();
+		modelAndView.addObject("itemObjs", listItems);
+		
+		modelAndView.setViewName("item-management");
+		return modelAndView;
+	}
 	
+	@RequestMapping(value="/itemManagementSubmit", method = RequestMethod.POST)
+	public ModelAndView itemManagementSubmit(Principal principal, @ModelAttribute(name="itemName") String itemName, BindingResult bindingResult){
+		ModelAndView modelAndView = new ModelAndView();
+		User userObj = setupBaseParameter(modelAndView, principal);
+		
+		Item itemObj =  itemService.findByItemName(itemName);
+		if(itemObj != null){
+			Errors errors = (Errors) new BindException("Item Name is already used");
+			bindingResult.addAllErrors(errors);
+			modelAndView.setViewName("item-management");
+		}else{
+			itemObj = new Item();
+			itemObj.setItemName(itemName);
+			itemService.save(itemObj);
+			
+			RedirectView redirectView = new RedirectView("itemManagement", true);
+			modelAndView.setView(redirectView);
+		}
+		
+		return modelAndView;
+	}
+	
+	@RequestMapping(value="/tableItemManagement", method = RequestMethod.GET)
+	public ModelAndView tableItemManagementView(Principal principal, @ModelAttribute(name="tableId") Long tableId, BindingResult bindingResult){
+		ModelAndView modelAndView = new ModelAndView();
+		
+		modelAndView.addObject("tableObj", tableService.findById(tableId));
+		modelAndView.addObject("itemList", itemService.getByAll());
+		
+		modelAndView.setViewName("table-item-management");
+		
+		return modelAndView;
+	}
+
+	@RequestMapping(value="/tableItemManagementSubmit", method = RequestMethod.POST)
+	public ModelAndView tableItemManagementSubmit(Principal principal, @ModelAttribute(name="tableObj") Table tableObj, BindingResult bindingResult){
+		ModelAndView modelAndView = new ModelAndView();
+
+		System.out.println(tableObj.getTableItems().size());
+		//tableService.save(tableObj);
+		//Table tableOldObj = tableService.findById(tableObj.getTableId());
+		//System.out.println("size: "+tableObj.getTableItems().size());
+		/*tableOldObj.setTableItems(tableObj.getTableItems());*/
+		//tableService.save(tableOldObj);
+		
+		/*modelAndView.addObject("tableObj", tableOldObj);
+		modelAndView.addObject("itemList", itemService.getByAll());*/
+		
+		modelAndView.setViewName("table-item-management");
+		
+		return modelAndView;
+	}
 }

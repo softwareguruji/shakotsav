@@ -9,4 +9,5 @@ public interface TableService {
 	public Table findByTableName(String tableName);
 	public Table save(Table table);
 	public List<Table> getByAll();
+	public Table findById(Long id);
 }
