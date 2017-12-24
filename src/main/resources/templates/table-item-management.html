@@ -12,6 +12,7 @@
 <body>
 <div data-role="page">
 	<div data-role="header">
+		<a href="home" data-icon="home">Home</a>
 		<h1>Table wise Item Manage</h1>
 	</div><!-- /header -->
 
@@ -27,7 +28,7 @@
 				<div>
 				    <fieldset data-role="controlgroup">
 				    	<div th:each="iO : ${itemList}">
-					        <input th:id="${'checkbox_'+iO.itemId}" type="checkbox" th:value="${iO.itemId}">
+					        <input th:id="${'checkbox_'+iO.itemId}" type="checkbox" th:name="${'checkbox_'+iO.itemId}" th:value="${iO.itemId}" >
 					        <label th:for="${'checkbox_'+iO.itemId}" th:text="${iO.itemName}">One</label>
 				        </div>
 				    </fieldset>

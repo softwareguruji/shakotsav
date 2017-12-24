@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8"></meta>
+<meta name="viewport" content="width=device-width, initial-scale=1"></meta>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
+<meta http-equiv="Pragma" content="no-cache"/>
+<meta http-equiv="Expires" content="0"/>
+<title>Table Item Pull Push</title>
+<link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css" />
+<script src="javascript/jquery-1.11.1.min.js"></script>
+<script src="javascript/jquery.mobile-1.4.5.min.js"></script>
+<script type="text/javascript">
+
+/* $( document ).delegate("#page", "pagebeforecreate", function() {
+	  alert('A page with an id of "aboutPage" is about to be created by jQuery Mobile!');
+});
+
+$( document ).delegate("#page", "pageinit", function() {
+	  alert('A page with an id of "aboutPage" was just created by jQuery Mobile!');
+	});
+	 */
+$(document).ready(function () {
+	//console.log( "ready!" );
+	
+	var listdata = $(".list-view-custom").listview({
+   		inset: true
+   	});
+	
+	(function worker() {
+		$.ajax({
+		    type: "GET",
+		    contentType: "application/json",
+		    url: "tableItemPushPollAJAX",
+		    dataType: 'json',
+		    cache: false,
+		    success: function (data) {
+		
+		    	//alert(JSON.stringify(data));
+		    	$('#list-table').find("li").remove();
+		    	
+		    	for(var i=0; i<data.table.length; i++){
+					
+		    		var innerLIs = "";
+		    		for(var j=0; j<data.table[i].itemsData.length; j++){
+		    			
+		    			var hiddenTableId = "<input type='hidden' class='hiddenTableId' value='"+data.table[i].tableId+"'></input>";
+		    			var hiddenItemId = "<input type='hidden' class='hiddenItemId' value='"+data.table[i].itemsData[j].itemId+"'></input>";
+		    			
+		    			if(data.table[i].itemsData[j].status == 'Requested'){
+			    			innerLIs += "<li>"+data.table[i].itemsData[j].itemName+"<span class=''><button class='received-call ui-btn ui-corner-all ui-btn-inline ui-mini'>"+hiddenTableId+hiddenItemId+"Received</button></span></li>";		    				
+		    			}else{
+			    			innerLIs += "<li>"+data.table[i].itemsData[j].itemName+"<span class=''><button class='request-call ui-btn ui-corner-all ui-btn-inline ui-mini'>"+hiddenTableId+hiddenItemId+"Request</button></span></li>";
+		    			}
+		    		}
+		    		
+		    		var innerULs = "<ul class='list-view-custom' data-role='listview'>"+innerLIs+"</ul>";
+	
+		    		var hiddenDivs = "<div class='inner-hidden'>"+innerULs+"</div>";
+		    		
+		    		var spanBubble = "<span class='ui-li-count'>"+data.table[i].itemsData.length+"</span>";
+		    		
+		    		var innerHeaderH2 = "<h2>"+data.table[i].tableName+spanBubble+"</h2>";
+		    		
+		    		var outerLI = "<li data-role='collapsible' data-iconpos='right' data-inset='false'>"+innerHeaderH2+hiddenDivs+"</li>";
+		    		//alert(outerLI);
+		    		$('#list-table').append(outerLI);
+				}
+
+		    	$(".list-view-custom h2").click(function(){
+		    		
+		    		$(listdata).find(".list-view-custom").listview({
+		    	   		inset: true
+		    	   	});
+		    		
+		    		$("#popupBasic h3").html($(this).text());
+		    		$("#popupBasic p").html($(this).parent().find('.inner-hidden').html());
+		    		$("#popupBasic").popup('open');
+		    	});
+		    	
+		    	
+		    	$(".inner-hidden").hide();
+		    	
+		    	$(listdata).listview("refresh");
+		    	
+		    	/* $('#list-table .request-call').each(function(index){
+		    		//alert($(this).html());
+		    		$(this).on('click',function(){
+		    			alert('ketan');
+		    		});
+		    	}); */
+	    		
+		    	/* $('#list-table .request-call').click(function(e){
+		    		alert('ketan');
+		    	}); */
+		    	
+		    	
+		        /* var json = "<h4>Ajax Response</h4><pre>"
+		            + JSON.stringify(data, null, 4) + "</pre>";
+		        $('#feedback').html(json);
+		
+		        console.log("SUCCESS : ", data);
+		        $("#btn-login").prop("disabled", false); */
+		
+		    },
+		    error: function (e) {
+		
+		        /* var json = "<h4>Ajax Response Error</h4><pre>"
+		            + e.responseText + "</pre>";
+		        $('#feedback').html(json);
+		
+		        console.log("ERROR : ", e);
+		        $("#btn-login").prop("disabled", false); */
+		
+		    },
+		    complete: function() {
+		        // Schedule the next request when the current one's complete
+		        setTimeout(worker, 5000);
+		    }
+		});
+	})();
+	
+	$(document).on('click', '.request-call', function(e) {
+	    //alert('ketan : '+$(this).find('.hiddenItemId').val()+' : '+$(this).find('.hiddenTableId').val());
+	    var tableId = $(this).find('.hiddenTableId').val();
+	    var itemId = $(this).find('.hiddenItemId').val();
+		$.ajax({
+		    type: "GET",
+		    contentType: "application/json",
+		    url: "tableItemRequestForDeliver",
+		    data: {
+		        tableId: tableId,
+		        itemId: itemId
+		    },
+		    dataType: 'json',
+		    cache: false,
+		    success: function (data) {
+		
+		    	alert(JSON.stringify(data));
+		    	$("#popupMessage p").html(data.message);
+		    	//$("#popupMessage").popup('refresh');
+		    	$("#popupMessage").popup('open');
+		
+		    },
+		    error: function (e) {
+		
+		        /* var json = "<h4>Ajax Response Error</h4><pre>"
+		            + e.responseText + "</pre>";
+		        $('#feedback').html(json);
+		
+		        console.log("ERROR : ", e);
+		        $("#btn-login").prop("disabled", false); */
+		
+		    }
+		});
+	    
+	   	//TODO:
+	});
+	
+});
+
+</script>
+</head>
+<body>
+<div data-role="page" id="page">
+
+	<div data-role="header">
+		<a href="home" data-icon="home">Home</a>
+		<h1>Table wise Item Pull Push</h1>
+	</div><!-- /header -->
+
+	<div role="main" class="ui-content">
+		<div>
+			<ul id="list-table" class="list-view-custom">
+			</ul>
+		</div>
+		<div data-role="content">
+	       <div data-role="popup" data-transition="flip" id="popupBasic" data-dismissible="false">
+	           <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
+	           <div data-role="header">
+	                <h3>Available Items</h3>
+	           </div>
+	           <div data-role="content">
+	               <p>This is a completely basic popup, no options set.</p>
+	           </div>
+	       </div>
+	       <div data-role="popup" data-transition="flip" id="popupMessage" data-dismissible="false">
+	           <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
+	           <div data-role="header">
+	                <h3>Message</h3>
+	           </div>
+	           <div data-role="content">
+	               <p>Message from Server</p>
+	           </div>
+	       </div>
+		  </div>
+		
+	</div><!-- /content -->
+
+	<div data-role="footer">
+		<h4>Jay Swaminarayan</h4>
+	</div><!-- /footer -->
+</div>
+
+</body>
+</html>

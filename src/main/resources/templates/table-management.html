@@ -12,6 +12,7 @@
 <body>
 <div data-role="page">
 	<div data-role="header">
+		<a href="home" data-icon="home">Home</a>
 		<h1>Tables Manage</h1>
 	</div><!-- /header -->
 
@@ -22,7 +23,7 @@
 					role="form">
 				<label for="tableName">Table Name: </label>
 				<input type="text" name="tableName" id="tableName" placeholder="Table Name" value="">
-				<label class="validation-error" >Error</label>
+				<label class="validation-error" >Error</label> 
 				<div align="center" th:if="${param.error}">
 					<p style="font-size: 20; color: #FF1C19;">Table Name is already used. Please check the table name.</p>
 				</div>

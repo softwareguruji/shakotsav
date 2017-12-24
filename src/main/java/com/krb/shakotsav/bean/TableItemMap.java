@@ -14,10 +14,8 @@ public class TableItemMap {
 	private TableItemPK tableItem;
 	
 	@OneToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name="ref_status_id", nullable=false)
+	@JoinColumn(name="ref_status_id", nullable=true)
 	private Status status;
-
-	
 
 	public TableItemPK getTableItem() {
 		return tableItem;
