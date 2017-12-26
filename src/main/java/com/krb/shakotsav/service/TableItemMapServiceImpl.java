@@ -52,5 +52,27 @@ public class TableItemMapServiceImpl implements TableItemMapService {
 			
 			
 	}
+
+	@Override
+	public void makeDispatchForItemByTable(Long tableId, Long itemId) {
+
+		TableItemPK tipk = new TableItemPK();
+		Item it = new Item();
+		it.setItemId(itemId);
+		tipk.setItem(it);
+		Table  tb = new Table();
+		tb.setTableId(tableId);
+		tipk.setTable(tb);
+		
+		List<TableItemMap> lstTableItem = tableItemMapRepository.findByTableItem(tipk);
+		if(lstTableItem != null && lstTableItem.size()>0){
+			TableItemMap tiO = lstTableItem.get(0);
+			Status requestStatus = new Status();
+			requestStatus.setStatusId(3L);
+			tiO.setStatus(requestStatus);
+			
+			save(tiO);
+		}
+	}
 	
 }

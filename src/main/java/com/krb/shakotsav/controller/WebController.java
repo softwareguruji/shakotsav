@@ -318,6 +318,13 @@ public class WebController extends BaseController{
 		return modelAndView;
 	}
 	
+	@RequestMapping(value="/tableItemPushPollViewForDispatcher", method = RequestMethod.GET)
+	public ModelAndView tableItemPushPollViewForDispatcher(){
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("table-item-pull-push-dispatcher");
+		return modelAndView;
+	}
+	
 	
 	
 	@RequestMapping(value="/tableItemRequestForDeliver", method = RequestMethod.GET)
@@ -333,6 +340,24 @@ public class WebController extends BaseController{
         MessageResponse mr = new MessageResponse();
         mr.setStatus("success");
         mr.setMessage("Request received. Dispatch will be initiated soon");
+        
+		return ResponseEntity.ok(mr);
+	}
+	
+	
+	@RequestMapping(value="/tableItemDispatched", method = RequestMethod.GET)
+	public ResponseEntity<?> tableItemDispatched(Principal principal, HttpServletRequest request){
+
+		String tableId = request.getParameter("tableId");
+        String itemId = request.getParameter("itemId");
+		
+        System.out.println(tableId+" : "+itemId);
+        
+        tableItemMapService.makeDispatchForItemByTable(Long.parseLong(tableId), Long.parseLong(itemId));
+
+        MessageResponse mr = new MessageResponse();
+        mr.setStatus("success");
+        mr.setMessage("Thanks for confirming request dispatch.");
         
 		return ResponseEntity.ok(mr);
 	}

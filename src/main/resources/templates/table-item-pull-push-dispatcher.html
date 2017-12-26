@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
 <meta http-equiv="Pragma" content="no-cache"/>
 <meta http-equiv="Expires" content="0"/>
-<title>Table Item Pull Push</title>
+<title>Table Item Pull Push Dispatcher</title>
 <link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css" />
 <link rel="stylesheet" th:href="@{css/custom-global.css}" />
 <script src="javascript/jquery-1.11.1.min.js"></script>
@@ -23,7 +23,7 @@ $( document ).delegate("#page", "pageinit", function() {
 	});
 	 */
 $(document).ready(function () {
-	//console.log( "ready!" );
+	console.log( "ready!" );
 	
 	var listdata = $(".list-view-custom").listview({
    		inset: true
@@ -43,6 +43,8 @@ $(document).ready(function () {
 		    	
 		    	for(var i=0; i<data.table.length; i++){
 					
+		    		var requestReceivedForDeliver = false;
+		    		var requestReceivedCounter = 0;
 		    		var innerLIs = "";
 		    		for(var j=0; j<data.table[i].itemsData.length; j++){
 		    			
@@ -50,23 +52,27 @@ $(document).ready(function () {
 		    			var hiddenItemId = "<input type='hidden' class='hiddenItemId' value='"+data.table[i].itemsData[j].itemId+"'></input>";
 		    			
 		    			if(data.table[i].itemsData[j].status == 'Requested'){
-			    			innerLIs += "<li>"+data.table[i].itemsData[j].itemName+"<span class='image-transit'></span><span><button class='received-call ui-btn ui-corner-all ui-btn-inline ui-mini'>"+hiddenTableId+hiddenItemId+"Received</button></span></li>";		    				
-		    			}else{
+		    				requestReceivedForDeliver = true;
+		    				requestReceivedCounter++;
+			    			innerLIs += "<li>"+data.table[i].itemsData[j].itemName+"<span><button class='received-call ui-btn ui-corner-all ui-btn-inline ui-mini'>"+hiddenTableId+hiddenItemId+"Dispatch</button></span></li>";		    				
+		    			}/* else{
 			    			innerLIs += "<li>"+data.table[i].itemsData[j].itemName+"<span class=''><button class='request-call ui-btn ui-corner-all ui-btn-inline ui-mini'>"+hiddenTableId+hiddenItemId+"Request</button></span></li>";
-		    			}
+		    			} */
 		    		}
 		    		
-		    		var innerULs = "<ul class='list-view-custom' data-role='listview'>"+innerLIs+"</ul>";
+		    		if(requestReceivedForDeliver){
+			    		var innerULs = "<ul class='list-view-custom' data-role='listview'>"+innerLIs+"</ul>";
+		
+			    		var hiddenDivs = "<div class='inner-hidden'>"+innerULs+"</div>";
+			    		
+			    		var spanBubble = "<span class='ui-li-count'>"+requestReceivedCounter+"</span>";
+			    		
+			    		var innerHeaderH2 = "<h2><span data-icon='ui-icon-arrow-u'></span>"+data.table[i].tableName+spanBubble+"</h2>";
+			    		
+			    		var outerLI = "<li data-role='collapsible' data-iconpos='right' data-inset='false'>"+innerHeaderH2+hiddenDivs+"</li>";
 	
-		    		var hiddenDivs = "<div class='inner-hidden'>"+innerULs+"</div>";
-		    		
-		    		var spanBubble = "<span class='ui-li-count'>"+data.table[i].itemsData.length+"</span>";
-		    		
-		    		var innerHeaderH2 = "<h2><span data-icon='ui-icon-arrow-u'></span>"+data.table[i].tableName+spanBubble+"</h2>";
-		    		
-		    		var outerLI = "<li data-role='collapsible' data-iconpos='right' data-inset='false'>"+innerHeaderH2+hiddenDivs+"</li>";
-		    		//alert(outerLI);
-		    		$('#list-table').append(outerLI);
+			    		$('#list-table').append(outerLI);
+		    		}
 				}
 
 		    	$(".list-view-custom h2").click(function(){
@@ -124,14 +130,14 @@ $(document).ready(function () {
 	
 	var popupRequestReceivedToDisplay = false;
 	
-	$(document).on('click', '.request-call', function(e) {
+	$(document).on('click', '.received-call', function(e) {
 	    //alert('ketan : '+$(this).find('.hiddenItemId').val()+' : '+$(this).find('.hiddenTableId').val());
 	    var tableId = $(this).find('.hiddenTableId').val();
 	    var itemId = $(this).find('.hiddenItemId').val();
 		$.ajax({
 		    type: "GET",
 		    contentType: "application/json",
-		    url: "tableItemRequestForDeliver",
+		    url: "tableItemDispatched",
 		    data: {
 		        tableId: tableId,
 		        itemId: itemId

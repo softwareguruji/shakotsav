@@ -9,4 +9,6 @@ public interface TableItemMapService {
 	public void delete(TableItemMap tableItemMapObj);
 	
 	public void makeRequestForItemByTable(Long tableId, Long itemId);
+	
+	public void makeDispatchForItemByTable(Long tableId, Long itemId);
 }
