@@ -9,3 +9,19 @@
 .image-transit{
 	background-image: url("../images/icons-png/in-transit.png");
 }
+
+.received-call{
+	color: white !important;
+	background-color: green !important; 	
+}
+
+.count-second {
+    right: 3em !important;
+    color: white !important;
+	background-color: green !important;
+}
+
+.red-bubble{
+	color: white !important;
+	background-color: red !important;
+}

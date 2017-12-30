@@ -65,9 +65,11 @@ $(document).ready(function () {
 		
 			    		var hiddenDivs = "<div class='inner-hidden'>"+innerULs+"</div>";
 			    		
-			    		var spanBubble = "<span class='ui-li-count'>"+requestReceivedCounter+"</span>";
+			    		var spanBubble = "<span class='ui-li-count red-bubble'>"+requestReceivedCounter+"</span>";
 			    		
-			    		var innerHeaderH2 = "<h2><span data-icon='ui-icon-arrow-u'></span>"+data.table[i].tableName+spanBubble+"</h2>";
+			    		var hiddenTableName = "<span class='hiddenTableName' style='display:none;'>"+data.table[i].tableName+"</span>";
+			    		
+			    		var innerHeaderH2 = "<h2><span data-icon='ui-icon-arrow-u'></span>"+data.table[i].tableName+spanBubble+hiddenTableName+"</h2>";
 			    		
 			    		var outerLI = "<li data-role='collapsible' data-iconpos='right' data-inset='false'>"+innerHeaderH2+hiddenDivs+"</li>";
 	
@@ -81,7 +83,7 @@ $(document).ready(function () {
 		    	   		inset: true
 		    	   	});
 		    		
-		    		$("#popupBasic h3").html($(this).text());
+		    		$("#popupBasic h3").html($(this).find('.hiddenTableName').text());
 		    		$("#popupBasic p").html($(this).parent().find('.inner-hidden').html());
 		    		$("#popupBasic").popup('open');
 		    	});

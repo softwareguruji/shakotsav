@@ -20,10 +20,10 @@
 		<label th:text="${T(com.krb.shakotsav.bean.definedentity.DefinedRole).SUPER_ADMIN.roleName}"></label> -->
 		<div th:if="${role[0].role == T(com.krb.shakotsav.bean.definedentity.DefinedRole).SUPER_ADMIN.roleName}">
 			<a href="#" class="ui-btn">Manage Users</a>
-			<a href="tableManagement" class="ui-btn">Manage Tables</a>
-			<a href="itemManagement" class="ui-btn">Manage Items</a>
-			<a href="tableItemPushPollView" class="ui-btn">Table Owner View</a>
-			<a href="tableItemPushPollViewForDispatcher" class="ui-btn">Dispatcher View</a>
+			<a href="tableManagement" class="ui-btn" rel="external">Manage Tables</a>
+			<a href="itemManagement" class="ui-btn" rel="external">Manage Items</a>
+			<a href="tableItemPushPollView" class="ui-btn" rel="external">Table Owner View</a>
+			<a href="tableItemPushPollViewForDispatcher" class="ui-btn" rel="external">Dispatcher View</a>
 		</div>
 	</div><!-- /content -->
 
