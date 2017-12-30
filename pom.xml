@@ -6,7 +6,6 @@
 	<groupId>com.krb</groupId>
 	<artifactId>shakotsav-naranpura</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>jar</packaging>
 
 	<name>shakotsav-naranpura</name>
 	<description>Shakotsav Application</description>
@@ -84,4 +83,5 @@
 	</build>
 
 
+	<packaging>war</packaging>
 </project>
